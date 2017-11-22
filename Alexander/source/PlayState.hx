@@ -14,14 +14,13 @@ class PlayState extends FlxState
 {
 	private var tiles:FlxTilemap;
 	private var player:Player;
-	private var platform:FlxSprite;
-	private var enemigos:FlxTypedGroup<Enemy>;
-	private var plataformaSube:FlxTypedGroup<PlatUp>;
-	private var plataformaBaja:FlxTypedGroup<PlatDown>;
+	private var platform:FlxSprite; 
+	private var enemigos:FlxTypedGroup <Enemy>;
+	private var plataformaSube:FlxTypedGroup <PlatUp>;
+	private var plataformaBaja:FlxTypedGroup <PlatDown>;
 	override public function create():Void
 	{
 		super.create();
-		
 		enemigos = new FlxTypedGroup<Enemy>();
 		var loader:FlxOgmoLoader = new FlxOgmoLoader(AssetPaths.LEVLGUAN__oel);
 		tiles = loader.loadTilemap(AssetPaths.Nube__png, 32, 32, "TAILS");
@@ -35,6 +34,8 @@ class PlayState extends FlxState
 		add(plataformaSube);
 		add(plataformaBaja);
 		add(player);
+		
+		camera.follow(player);
 		
 		player = new Player(300, 100);
 		

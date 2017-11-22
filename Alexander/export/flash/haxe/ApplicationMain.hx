@@ -50,6 +50,10 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
+		urls.push ("assets/images/TraumasE.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/music/music-goes-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
@@ -143,7 +147,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "38",
+			build: "71",
 			company: "Nai",
 			file: "Alexander",
 			fps: 60,
@@ -161,13 +165,13 @@ class ApplicationMain {
 					display: 0,
 					fullscreen: false,
 					hardware: true,
-					height: 480,
+					height: 720,
 					parameters: "{}",
 					resizable: true,
 					stencilBuffer: true,
 					title: "Alexander",
 					vsync: true,
-					width: 640,
+					width: 980,
 					x: null,
 					y: null
 				},
@@ -185,7 +189,7 @@ class ApplicationMain {
 		
 		#if (js && html5)
 		#if (munit || utest)
-		openfl.Lib.embed (null, 640, 480, "000000");
+		openfl.Lib.embed (null, 980, 720, "000000");
 		#end
 		#else
 		create ();

@@ -1,7 +1,6 @@
 #if !macro
 
 
-@:access(lime.app.Application)
 @:access(lime.Assets)
 @:access(openfl.display.Stage)
 
@@ -15,14 +14,21 @@ class ApplicationMain {
 	
 	public static function create ():Void {
 		
-		var app = new openfl.display.Application ();
+		var app = new lime.app.Application ();
 		app.create (config);
+		openfl.Lib.application = app;
+		
+		#if !flash
+		var stage = new openfl.display.Stage (app.window.width, app.window.height, config.background);
+		stage.window = app.window;
+		stage.addChild (openfl.Lib.current);
+		app.addModule (stage);
+		#end
 		
 		var display = new flixel.system.FlxPreloader ();
 		
 		preloader = new openfl.display.Preloader (display);
-		app.setPreloader (preloader);
-		preloader.onComplete.add (init);
+		preloader.onComplete = init;
 		preloader.create (config);
 		
 		#if (js && html5)
@@ -46,6 +52,14 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
+		urls.push ("assets/images/Nube.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/TraumasE.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/music/music-goes-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
@@ -54,11 +68,19 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
-		urls.push ("flixel/sounds/beep.ogg");
+		urls.push ("assets/sounds/beep.mp3");
+		types.push (lime.Assets.AssetType.MUSIC);
+		
+		
+		urls.push ("assets/sounds/flixel.mp3");
+		types.push (lime.Assets.AssetType.MUSIC);
+		
+		
+		urls.push ("assets/sounds/beep.ogg");
 		types.push (lime.Assets.AssetType.SOUND);
 		
 		
-		urls.push ("flixel/sounds/flixel.ogg");
+		urls.push ("assets/sounds/flixel.ogg");
 		types.push (lime.Assets.AssetType.SOUND);
 		
 		
@@ -66,16 +88,8 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.FONT);
 		
 		
-		urls.push ("Monsterrat");
+		urls.push ("Arial");
 		types.push (lime.Assets.AssetType.FONT);
-		
-		
-		urls.push ("flixel/images/ui/button.png");
-		types.push (lime.Assets.AssetType.IMAGE);
-		
-		
-		urls.push ("flixel/images/logo/default.png");
-		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
 		
@@ -125,7 +139,6 @@ class ApplicationMain {
 		
 		
 		
-		
 		if (total == 0) {
 			
 			start ();
@@ -139,49 +152,38 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "27",
+			antialiasing: Std.int (0),
+			background: Std.int (0),
+			borderless: false,
 			company: "Nai",
+			depthBuffer: false,
 			file: "Alexander",
-			fps: 60,
-			name: "Alexander",
+			fps: Std.int (60),
+			fullscreen: false,
+			hardware: true,
+			height: Std.int (720),
 			orientation: "",
 			packageName: "com.example.myapp",
+			resizable: false,
+			stencilBuffer: true,
+			title: "Alexander",
 			version: "0.0.1",
-			windows: [
-				
-				{
-					antialiasing: 0,
-					background: 0,
-					borderless: false,
-					depthBuffer: false,
-					display: 0,
-					fullscreen: false,
-					hardware: false,
-					height: 480,
-					parameters: "{}",
-					resizable: false,
-					stencilBuffer: true,
-					title: "Alexander",
-					vsync: true,
-					width: 640,
-					x: null,
-					y: null
-				},
-			]
+			vsync: true,
+			width: Std.int (980)
 			
-		};
+		}
 		
 		#if hxtelemetry
 		var telemetry = new hxtelemetry.HxTelemetry.Config ();
 		telemetry.allocations = true;
 		telemetry.host = "localhost";
-		telemetry.app_name = config.name;
+		telemetry.app_name = config.title;
 		Reflect.setField (config, "telemetry", telemetry);
 		#end
 		
 		#if (js && html5)
 		#if (munit || utest)
-		openfl.Lib.embed (null, 640, 480, "000000");
+		openfl.Lib.embed (null, 980, 720, "000000");
 		#end
 		#else
 		create ();
@@ -224,21 +226,13 @@ class ApplicationMain {
 			
 		}
 		
-		#if !flash
-		if (openfl.Lib.current.stage.window.fullscreen) {
-			
-			openfl.Lib.current.stage.dispatchEvent (new openfl.events.FullScreenEvent (openfl.events.FullScreenEvent.FULL_SCREEN, false, false, true, true));
-			
-		}
-		
 		openfl.Lib.current.stage.dispatchEvent (new openfl.events.Event (openfl.events.Event.RESIZE, false, false));
-		#end
 		
 	}
 	
 	
 	#if neko
-	@:noCompletion @:dox(hide) public static function __init__ () {
+	@:noCompletion public static function __init__ () {
 		
 		var loader = new neko.vm.Loader (untyped $loader);
 		loader.addPath (haxe.io.Path.directory (Sys.executablePath ()));
